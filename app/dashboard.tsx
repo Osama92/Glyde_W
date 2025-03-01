@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -7,24 +7,81 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import { VictoryBar, VictoryChart, VictoryAxis, VictoryTheme } from 'victory-native';
+import { BarChart } from 'react-native-gifted-charts';
 import { MaterialIcons } from '@expo/vector-icons';
+import { getFirestore, collection, getDocs, query } from 'firebase/firestore';
+import { app } from '../firebase';
+
+const db = getFirestore(app);
 
 const DashboardScreen: React.FC = () => {
   const { width } = useWindowDimensions();
-  const isMobile = width < 768; // Define breakpoint for mobile
-  const [isSidebarVisible, setSidebarVisible] = useState(!isMobile); // Sidebar visible by default on desktop
+  const isMobile = width < 768;
+  const [isSidebarVisible, setSidebarVisible] = useState(!isMobile);
+  const [shipments, setShipments] = useState<any[]>([]);
+  const [deliveries, setDeliveries] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch shipments and deliveries from Firebase
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Fetch shipments
+        const shipmentQuery = query(collection(db, 'Shipment'));
+        const shipmentSnapshot = await getDocs(shipmentQuery);
+        const shipmentData = shipmentSnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setShipments(shipmentData);
+
+        // Fetch deliveries for each shipment
+        const deliveryData: any[] = [];
+        for (const shipment of shipmentData) {
+          const deliveryQuery = query(collection(db, 'Shipment', shipment.id, 'deliveries'));
+          const deliverySnapshot = await getDocs(deliveryQuery);
+          deliverySnapshot.forEach((doc) => {
+            deliveryData.push({
+              shipmentId: shipment.id,
+              ...doc.data(),
+            });
+          });
+        }
+        setDeliveries(deliveryData);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  // Calculate total number of shipments
+  const totalShipments = shipments.length;
+
+  // Calculate total freight cost
+  const totalFreightCost = shipments.reduce((sum, shipment) => sum + (shipment.freightCost || 0), 0);
 
   // Sample data for the graph
   const graphData = [
-    { x: 'Oct 30', y: 120 },
-    { x: 'Oct 31', y: 150 },
-    { x: 'Nov 01', y: 200 },
-    { x: 'Nov 02', y: 180 },
-    { x: 'Nov 03', y: 220 },
-    { x: 'Nov 04', y: 250 },
-    { x: 'Nov 05', y: 300 },
+    { value: 120, label: 'Oct 30' },
+    { value: 150, label: 'Oct 31' },
+    { value: 200, label: 'Nov 01' },
+    { value: 180, label: 'Nov 02' },
+    { value: 220, label: 'Nov 03' },
+    { value: 250, label: 'Nov 04' },
+    { value: 300, label: 'Nov 05' },
   ];
+
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
@@ -59,11 +116,11 @@ const DashboardScreen: React.FC = () => {
           <View style={styles.analyticsGrid}>
             <View style={styles.analyticsCard}>
               <Text style={styles.analyticsCardTitle}>Shipment</Text>
-              <Text style={styles.analyticsCardValue}>120</Text>
+              <Text style={styles.analyticsCardValue}>{totalShipments}</Text>
             </View>
             <View style={styles.analyticsCard}>
-              <Text style={styles.analyticsCardTitle}>Cashflow</Text>
-              <Text style={styles.analyticsCardValue}>$5,000</Text>
+              <Text style={styles.analyticsCardTitle}>Freight Cost</Text>
+              <Text style={styles.analyticsCardValue}>${totalFreightCost.toFixed(2)}</Text>
             </View>
             <View style={styles.analyticsCard}>
               <Text style={styles.analyticsCardTitle}>Message</Text>
@@ -75,40 +132,22 @@ const DashboardScreen: React.FC = () => {
         {/* Graph Metrics Section */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Shipment Metrics</Text>
-          <VictoryChart
-            theme={VictoryTheme.material}
-            domainPadding={20}
-            width={isMobile ? width - 40 : 600} // Adjust width for mobile
-          >
-            <VictoryAxis
-              tickValues={graphData.map((data) => data.x)}
-              style={{
-                tickLabels: { fontSize: 10, angle: -45, textAnchor: 'end' },
-              }}
-            />
-            <VictoryAxis dependentAxis />
-            <VictoryBar
-              data={graphData}
-              x="x"
-              y="y"
-              style={{ data: { fill: '#FFA500' } }
-            />
-          </VictoryChart>
-        </View>
-
-        {/* Cashflow Stat Section */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Cashflow Stat</Text>
-          <View style={styles.cashflowGrid}>
-            <View style={styles.cashflowCard}>
-              <Text style={styles.cashflowCardTitle}>Income</Text>
-              <Text style={styles.cashflowCardValue}>$10,000</Text>
-            </View>
-            <View style={styles.cashflowCard}>
-              <Text style={styles.cashflowCardTitle}>Spend</Text>
-              <Text style={styles.cashflowCardValue}>$5,000</Text>
-            </View>
-          </View>
+          <BarChart
+            data={graphData}
+            barWidth={isMobile ? 30 : 40}
+            spacing={20}
+            roundedTop
+            roundedBottom
+            frontColor="#FFA500"
+            yAxisThickness={0}
+            xAxisThickness={0}
+            noOfSections={5}
+            yAxisTextStyle={{ color: '#666' }}
+            xAxisLabelTextStyle={{ color: '#666', textAlign: 'center' }}
+            showReferenceLine1
+            referenceLine1Position={200}
+            referenceLine1Config={{ color: 'red', dashWidth: 2, dashGap: 3 }}
+          />
         </View>
 
         {/* Recent Shipment Section */}
@@ -117,32 +156,25 @@ const DashboardScreen: React.FC = () => {
           <Text style={styles.sectionSubtitle}>This data from October 30 - November 05</Text>
           <View style={styles.table}>
             <View style={styles.tableRow}>
-              <Text style={styles.tableHeader}>ID Tracking</Text>
+              <Text style={styles.tableHeader}>Shipment#</Text>
+              <Text style={styles.tableHeader}>Delivery#</Text>
               <Text style={styles.tableHeader}>Customer</Text>
               <Text style={styles.tableHeader}>Date</Text>
               <Text style={styles.tableHeader}>Weight</Text>
-              <Text style={styles.tableHeader}>Recent Location</Text>
+              <Text style={styles.tableHeader}>Destination</Text>
               <Text style={styles.tableHeader}>Status</Text>
-              <Text style={styles.tableHeader}>Action</Text>
             </View>
-            <View style={styles.tableRow}>
-              <Text style={styles.tableCell}>8JXIGL21#N1</Text>
-              <Text style={styles.tableCell}>Johny Iskandar</Text>
-              <Text style={styles.tableCell}>2023-11-05</Text>
-              <Text style={styles.tableCell}>3.2kg</Text>
-              <Text style={styles.tableCell}>Main Post Office, New York, USA</Text>
-              <Text style={styles.tableCell}>Transit</Text>
-              <Text style={styles.tableCell}>Transit</Text>
-            </View>
-            <View style={styles.tableRow}>
-              <Text style={styles.tableCell}>TRK789012</Text>
-              <Text style={styles.tableCell}>Carlos Rodriguez</Text>
-              <Text style={styles.tableCell}>2023-11-05</Text>
-              <Text style={styles.tableCell}>2.8kg</Text>
-              <Text style={styles.tableCell}>Distribution Center, Los Angeles, USA</Text>
-              <Text style={styles.tableCell}>Completed</Text>
-              <Text style={styles.tableCell}>Completed</Text>
-            </View>
+            {deliveries.map((delivery, index) => (
+              <View key={index} style={styles.tableRow}>
+                <Text style={styles.tableCell}>{delivery.shipmentId}</Text>
+                <Text style={styles.tableCell}>{delivery.deliveryNumber}</Text>
+                <Text style={styles.tableCell}>{delivery.customer}</Text>
+                <Text style={styles.tableCell}>{delivery.createdAt}</Text>
+                <Text style={styles.tableCell}>{delivery.weight}</Text>
+                <Text style={styles.tableCell}>{delivery.address}</Text>
+                <Text style={styles.tableCell}>{delivery.statusId}</Text>
+              </View>
+            ))}
           </View>
         </View>
       </ScrollView>
@@ -162,7 +194,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   mobileSidebar: {
-    width: '100%', // Full width on mobile
+    width: '100%',
     position: 'absolute',
     zIndex: 1,
     height: '100%',
@@ -186,7 +218,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   contentShifted: {
-    marginLeft: 250, // Shift content when sidebar is visible on mobile
+    marginLeft: 250,
   },
   section: {
     marginBottom: 30,
@@ -228,32 +260,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginTop: 10,
   },
-  cashflowGrid: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  cashflowCard: {
-    flex: 1,
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    padding: 20,
-    marginRight: 10,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  cashflowCardTitle: {
-    fontSize: 16,
-    color: '#666',
-  },
-  cashflowCardValue: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginTop: 10,
-  },
   table: {
     backgroundColor: '#fff',
     borderRadius: 10,
@@ -290,6 +296,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#2c3e50',
     padding: 10,
     borderRadius: 5,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 
