@@ -36,6 +36,15 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "e081b97f-a2d8-43e4-a66b-b87c6c84f084"
+      }
+    },
+    "owner": "osama92"
   }
 }
