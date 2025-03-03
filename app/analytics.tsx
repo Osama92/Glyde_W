@@ -16,14 +16,13 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { getFirestore, collection, getDocs, query } from 'firebase/firestore';
 import { app } from '../firebase';
 import { useRouter } from 'expo-router'; // For navigation
-import MapView from './mapView';
 
 const db = getFirestore(app);
 
 //const { width } = useWindowDimensions();
 const isMobile = 768;
 
-const DashboardScreen: React.FC = () => {
+const Analytics: React.FC = () => {
   const { width } = useWindowDimensions();
   const isMobile = width < 768;
   const [isSidebarVisible, setSidebarVisible] = useState(!isMobile);
@@ -189,10 +188,10 @@ const DashboardScreen: React.FC = () => {
         <View style={[styles.sidebar, isMobile && styles.mobileSidebar]}>
           <Image source={require('../assets/images/Glyde.png')} resizeMode='contain' style={{width:40, height:40}}/>
           <View style={styles.menu}>
-            <TouchableOpacity onPress={() => router.push('/dashboard')} style={styles.menuItem}>
+            <TouchableOpacity onPress={() => router.push('/shipment')} style={styles.menuItem}>
               <Image source={require('../assets/images/dashboard.png')} resizeMode='contain' style={{width:30, height: 30}}/>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => router.push('/analytics')} style={styles.menuItem}>
+            <TouchableOpacity onPress={() => router.push('/cashflow')} style={styles.menuItem}>
             <Image source={require('../assets/images/analytics.png')} resizeMode='contain' style={{width:30, height: 30}}/>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => router.push('/message')} style={styles.menuItem}>
@@ -210,8 +209,8 @@ const DashboardScreen: React.FC = () => {
 
         {/* Analytics Section */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Track Delivery Vehicles</Text>
-          <MapView/>
+          <Text style={styles.sectionTitle}>Analytics</Text>
+          <Text style={styles.sectionSubtitle}>This data from October 30 - November 05</Text>
           <View style={styles.analyticsGrid}>
             <View style={styles.analyticsCard}>
               <Text style={styles.analyticsCardTitle}>Shipment</Text>
@@ -374,7 +373,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'row',
-    backgroundColor: '#fff',
+    backgroundColor: '#f5f5f5',
   },
   sidebar: {
     width: 90,
@@ -567,4 +566,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DashboardScreen;
+export default Analytics;
