@@ -176,7 +176,7 @@ export default function ShipmentDetails({ selectedVehicle }: ShipmentDetailsProp
           style={styles.seeAllButton}
           onPress={() => setModalVisible(true)}
         >
-          <Text style={styles.seeAllButtonText}>See All</Text>
+          <Text style={styles.seeAllButtonText}>View all shipment</Text>
         </TouchableOpacity>
       )}
 
@@ -218,29 +218,34 @@ export default function ShipmentDetails({ selectedVehicle }: ShipmentDetailsProp
 const styles = StyleSheet.create({
   container: {
     padding: 16,
-    backgroundColor: "#f9f9f9",
-    borderRadius: 8,
-    margin: 16,
+    backgroundColor: "#FE7A36",
+    borderRadius: 20,
+    // margin: 16,
+    justifyContent: "center",
+    flex: 1,
   },
   title: {
-    fontSize: 18,
+    fontSize: 28,
     fontWeight: "bold",
-    marginBottom: 8,
+    marginBottom: 15,
+    color:'#fff'
   },
   detail: {
     fontSize: 14,
     marginBottom: 4,
+    color:'#fff'
+    
   },
   seeAllButton: {
     marginTop: 10,
     alignSelf: "flex-end",
-    backgroundColor: "#007BFF",
+    // backgroundColor: "#007BFF",
     padding: 8,
     borderRadius: 5,
   },
   seeAllButtonText: {
     color: "#fff",
-    fontSize: 14,
+    fontSize: 12,
   },
   modalContainer: {
     flex: 1,

@@ -18,6 +18,7 @@ import { app } from '../firebase';
 import { useRouter } from 'expo-router'; 
 import MapView from './mapView';
 import ShipmentDetails from "../app/shipmentDetails";
+import TruckCapacity from "../app/truckCapacity";
 
 const db = getFirestore(app);
 
@@ -197,7 +198,7 @@ const DashboardScreen: React.FC = () => {
             <TouchableOpacity onPress={() => router.push('/analytics')} style={styles.menuItem}>
             <Image source={require('../assets/images/analytics.png')} resizeMode='contain' style={{width:30, height: 30}}/>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => router.push('/message')} style={styles.menuItem}>
+            <TouchableOpacity onPress={() => router.push('/')} style={styles.menuItem}>
             <Image source={require('../assets/images/shipmentIcon.png')} resizeMode='contain' style={{width:30, height: 30}}/>
             </TouchableOpacity>
           </View>
@@ -212,9 +213,13 @@ const DashboardScreen: React.FC = () => {
 
         {/* Analytics Section */}
         <View style={styles.section}>
+          <Text style={styles.sectionTitle1}>Hello Admin 👋🏻</Text>
           <Text style={styles.sectionTitle}>Track Delivery Vehicles</Text>
           <MapView onVehicleSelect={(vehicle) => setSelectedVehicle(vehicle)}/>
+          <View style={{flexDirection:'row', justifyContent:'space-between', width:600, margin: 16,}}>
           <ShipmentDetails selectedVehicle={selectedVehicle} />
+          <TruckCapacity selectedVehicle={selectedVehicle} />
+          </View>
           <View style={styles.analyticsGrid}>
             <View style={styles.analyticsCard}>
               <Text style={styles.analyticsCardTitle}>Shipment</Text>
@@ -432,6 +437,13 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 10,
+    marginLeft: 15
+  },
+  sectionTitle1: {
+    fontSize: 40,
+    fontWeight: 'bold',
+    marginBottom: 40,
+    marginLeft: 15
   },
   sectionSubtitle: {
     fontSize: 14,
