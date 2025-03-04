@@ -15,8 +15,9 @@ import { BarChart, LineChart, PieChart } from 'react-native-gifted-charts';
 import { MaterialIcons } from '@expo/vector-icons';
 import { getFirestore, collection, getDocs, query } from 'firebase/firestore';
 import { app } from '../firebase';
-import { useRouter } from 'expo-router'; // For navigation
+import { useRouter } from 'expo-router'; 
 import MapView from './mapView';
+import ShipmentDetails from "../app/shipmentDetails";
 
 const db = getFirestore(app);
 
@@ -33,7 +34,8 @@ const DashboardScreen: React.FC = () => {
   const [selectedDelivery, setSelectedDelivery] = useState<any>(null);
   const [materials, setMaterials] = useState<any[]>([]);
   const [isModalVisible, setModalVisible] = useState(false);
-  const [searchQuery, setSearchQuery] = useState(''); // For search input
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedVehicle, setSelectedVehicle] = useState<string>("");
   const router = useRouter(); // Initialize router for navigation
 
   // Fetch shipments and deliveries from Firebase
@@ -211,7 +213,8 @@ const DashboardScreen: React.FC = () => {
         {/* Analytics Section */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Track Delivery Vehicles</Text>
-          <MapView/>
+          <MapView onVehicleSelect={(vehicle) => setSelectedVehicle(vehicle)}/>
+          <ShipmentDetails selectedVehicle={selectedVehicle} />
           <View style={styles.analyticsGrid}>
             <View style={styles.analyticsCard}>
               <Text style={styles.analyticsCardTitle}>Shipment</Text>

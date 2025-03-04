@@ -31,7 +31,11 @@ interface TruckDetails {
   type: string;
 }
 
-export default function MapView() {
+interface MapView {
+  onVehicleSelect: (vehicle: string) => void;
+}
+
+export default function MapView({ onVehicleSelect }: MapView) {
   const [transporters, setTransporters] = useState<Transporter>({});
   const [selectedTransporter, setSelectedTransporter] = useState<string>("");
   const [selectedVehicle, setSelectedVehicle] = useState<string>("");
@@ -117,6 +121,7 @@ export default function MapView() {
   // Handle vehicle selection (real-time updates)
   useEffect(() => {
     if (selectedVehicle) {
+      onVehicleSelect(selectedVehicle);
       const q = query(collection(db, "deliverydriver"), where("AssignedVanNo", "==", selectedVehicle));
 
       const unsubscribe = onSnapshot(q, (querySnapshot) => {
@@ -150,7 +155,7 @@ export default function MapView() {
       // Cleanup listener on unmount or when vehicle changes
       return () => unsubscribe();
     }
-  }, [selectedVehicle]);
+  }, [selectedVehicle, onVehicleSelect]);
 
   if (loadError) return <Text>Error loading maps</Text>;
   if (!isLoaded || loading) return <Text>Loading...</Text>;
