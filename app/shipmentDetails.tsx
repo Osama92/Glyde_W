@@ -165,10 +165,12 @@ export default function ShipmentDetails({ selectedVehicle }: ShipmentDetailsProp
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Shipment Details</Text>
+      <Text style={styles.detail}>Transporter: {shipment.transporter}</Text>
+      <Text style={styles.detail}>Transporter: {shipment.vehicleNo}</Text>
       <Text style={styles.detail}>Driver Name: {shipment.driverName}</Text>
       <Text style={styles.detail}>Route: {shipment.route}</Text>
       <Text style={styles.detail}>Status: {getStatusText(shipment.statusId)}</Text>
-      <Text style={styles.detail}>Transporter: {shipment.transporter}</Text>
+      
 
       {/* Show "See All" button if statusId is less than 4 */}
       {shipment.statusId < 4 && (
