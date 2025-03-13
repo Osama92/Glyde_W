@@ -3,23 +3,20 @@ import {
   View,
   Text,
   TextInput,
-  Alert,
   StyleSheet,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
   ActivityIndicator,
   TouchableOpacity,
-  Image,
   Dimensions,
 } from 'react-native';
 import { getFirestore, doc, setDoc } from 'firebase/firestore';
-import SearchableDropdown from 'react-native-searchable-dropdown';
+import RNPickerSelect from 'react-native-picker-select';
 import { app } from '../firebase';
-import { router } from 'expo-router';
+
 
 const db = getFirestore(app);
-
 const collections = [
   { id: 'deliverydriver', name: 'Delivery Driver' },
   { id: 'customer', name: 'Customer' },
@@ -37,11 +34,19 @@ const AddUserScreen: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const { width } = Dimensions.get('window');
-  const isWeb = width >= 768; // Check if the screen width is for web
+  const isWeb = width >= 768;
+
+  const showAlert = (title: string, message: string) => {
+    if (isWeb) {
+      window.alert(`${title}: ${message}`);
+    } else {
+      alert(`${title}: ${message}`);
+    }
+  };
 
   const handleSave = async () => {
     if (!selectedCollection) {
-      Alert.alert('Error', 'Please select a collection');
+      showAlert('Error', 'Please select a collection');
       return;
     }
 
@@ -49,12 +54,12 @@ const AddUserScreen: React.FC = () => {
       selectedCollection === 'deliverydriver' &&
       (!phoneNumber || !name || !assignedVanNo || !transporter || !password)
     ) {
-      Alert.alert('Error', 'All fields are required for Delivery Driver');
+      showAlert('Error', 'All fields are required for Delivery Driver');
       return;
     }
 
     if (selectedCollection === 'customer' && (!phoneNumber || !name || !password)) {
-      Alert.alert('Error', 'All fields are required for Customer');
+      showAlert('Error', 'All fields are required for Customer');
       return;
     }
 
@@ -64,28 +69,40 @@ const AddUserScreen: React.FC = () => {
     if (selectedCollection === 'deliverydriver') {
       Object.assign(userData, {
         AssignedVanNo: assignedVanNo,
-        phoneNumber: phoneNumber,
-        name: name,
+        phoneNumber,
+        name,
         Transporter: transporter,
-        password: password,
+        password,
       });
     } else if (selectedCollection === 'customer') {
       Object.assign(userData, {
-        phoneNumber: phoneNumber,
-        name: name,
-        password: password,
+        phoneNumber,
+        name,
+        password,
+      });
+    } else if (selectedCollection === 'transporter') {
+      Object.assign(userData, {
+        phoneNumber,
+        name,
+        password,
+      });
+    } else if (selectedCollection === 'fieldagent') {
+      Object.assign(userData, {
+        phoneNumber,
+        name,
+        password,
       });
     }
 
-    setIsLoading(true); // Show loading indicator
+    setIsLoading(true);
     try {
       await setDoc(doc(db, selectedCollection, uid), userData);
-      Alert.alert('Success', 'User added successfully');
+      showAlert('Success', 'User added successfully');
     } catch (error) {
-      Alert.alert('Error', 'Failed to add user');
+      showAlert('Error', 'Failed to add user');
       console.error(error);
     } finally {
-      setIsLoading(false); // Hide loading indicator
+      setIsLoading(false);
     }
   };
 
@@ -94,114 +111,66 @@ const AddUserScreen: React.FC = () => {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={styles.container}
     >
-      <View style={styles.topSection}>
-        <Text style={{ fontSize: 20, fontWeight: 'bold', marginTop: 20 }}>Back</Text>
-        <TouchableOpacity onPress={() => router.back()} style={{ marginLeft: 20, marginTop: 20 }}>
-          <Image
-            source={require('../../assets/images/Back.png')}
-            style={{ width: 30, resizeMode: 'contain', marginRight: 10 }}
-          />
-        </TouchableOpacity>
-      </View>
-      <ScrollView
-        contentContainerStyle={[styles.scrollContainer, isWeb && styles.scrollContainerWeb]}
-        keyboardShouldPersistTaps="handled"
-      >
+      <ScrollView contentContainerStyle={[styles.scrollContainer, isWeb && styles.scrollContainerWeb]}>
         <Text style={styles.label}>Select Collection</Text>
-        <SearchableDropdown
-          onItemSelect={(item) => setSelectedCollection(item.id)}
-          items={collections}
-          placeholder={
-            selectedCollection ? collections.find((c) => c.id === selectedCollection)?.name : 'Select Category..'
-          }
-          containerStyle={styles.dropdownContainer}
-          itemStyle={styles.dropdownItem}
-          itemTextStyle={styles.dropdownItemText}
-          placeholderTextStyle={styles.placeholderText}
-          placeholderTextColor={'#666'}
-        />
+        <RNPickerSelect
+  onValueChange={(value) => setSelectedCollection(value)}
+  items={collections.map((item) => ({
+    label: item.name,
+    value: item.id,
+  }))}
+  placeholder={{ label: 'Select Category..', value: null }}
+  style={{
+    inputIOS: styles.input,
+    inputAndroid: styles.input,
+  }}
+/>
 
         {selectedCollection === 'deliverydriver' && (
           <>
             <Text style={styles.label}>Assigned Van No</Text>
-            <TextInput
-              value={assignedVanNo}
-              onChangeText={setAssignedVanNo}
-              style={styles.input}
-              placeholder="Enter Van No"
-              placeholderTextColor="#999"
-            />
-
+            <TextInput value={assignedVanNo} onChangeText={setAssignedVanNo} style={styles.input} placeholder="Enter Van No" />
             <Text style={styles.label}>Phone Number</Text>
-            <TextInput
-              value={phoneNumber}
-              onChangeText={setPhoneNumber}
-              keyboardType="phone-pad"
-              style={styles.input}
-              placeholder="Enter Phone Number"
-              placeholderTextColor="#999"
-            />
-
+            <TextInput value={phoneNumber} onChangeText={setPhoneNumber} keyboardType="phone-pad" style={styles.input} placeholder="Enter Phone Number" />
             <Text style={styles.label}>Name</Text>
-            <TextInput
-              value={name}
-              onChangeText={setName}
-              style={styles.input}
-              placeholder="Enter Name"
-              placeholderTextColor="#999"
-            />
-
+            <TextInput value={name} onChangeText={setName} style={styles.input} placeholder="Enter Name" />
             <Text style={styles.label}>Transporter</Text>
-            <TextInput
-              value={transporter}
-              onChangeText={setTransporter}
-              style={styles.input}
-              placeholder="Enter Transporter"
-              placeholderTextColor="#999"
-            />
-
+            <TextInput value={transporter} onChangeText={setTransporter} style={styles.input} placeholder="Enter Transporter" />
             <Text style={styles.label}>Password</Text>
-            <TextInput
-              value={password}
-              onChangeText={setPassword}
-              secureTextEntry
-              style={styles.input}
-              placeholder="Enter Password"
-              placeholderTextColor="#999"
-            />
+            <TextInput value={password} onChangeText={setPassword} secureTextEntry style={styles.input} placeholder="Enter Password" />
           </>
         )}
 
-        {selectedCollection === 'customer' && (
+      {selectedCollection === 'customer' && (
           <>
             <Text style={styles.label}>Phone Number</Text>
-            <TextInput
-              value={phoneNumber}
-              onChangeText={setPhoneNumber}
-              keyboardType="phone-pad"
-              style={styles.input}
-              placeholder="Enter Phone Number"
-              placeholderTextColor="#999"
-            />
-
-            <Text style={styles.label}>Name</Text>
-            <TextInput
-              value={name}
-              onChangeText={setName}
-              style={styles.input}
-              placeholder="Enter Name"
-              placeholderTextColor="#999"
-            />
-
+            <TextInput value={phoneNumber} onChangeText={setPhoneNumber} keyboardType="phone-pad" style={styles.input} placeholder="Enter Phone Number" />
+            <Text style={styles.label}>Customer Name</Text>
+            <TextInput value={name} onChangeText={setName} style={styles.input} placeholder="Enter Customer/ Business Name" />
             <Text style={styles.label}>Password</Text>
-            <TextInput
-              value={password}
-              onChangeText={setPassword}
-              secureTextEntry
-              style={styles.input}
-              placeholder="Enter Password"
-              placeholderTextColor="#999"
-            />
+            <TextInput value={password} onChangeText={setPassword} secureTextEntry style={styles.input} placeholder="Enter Password" />
+          </>
+        )}
+
+        {selectedCollection === 'transporter' && (
+          <>
+            <Text style={styles.label}>Phone Number</Text>
+            <TextInput value={phoneNumber} onChangeText={setPhoneNumber} keyboardType="phone-pad" style={styles.input} placeholder="Enter Phone Number" />
+            <Text style={styles.label}>Transporter Name</Text>
+            <TextInput value={name} onChangeText={setName} style={styles.input} placeholder="Enter Transporter/ Business Name" />
+            <Text style={styles.label}>Password</Text>
+            <TextInput value={password} onChangeText={setPassword} secureTextEntry style={styles.input} placeholder="Enter Password" />
+          </>
+        )}
+
+        {selectedCollection === 'fieldagent' && (
+          <>
+            <Text style={styles.label}>Phone Number</Text>
+            <TextInput value={phoneNumber} onChangeText={setPhoneNumber} keyboardType="phone-pad" style={styles.input} placeholder="Enter Phone Number" />
+            <Text style={styles.label}>Agent Name</Text>
+            <TextInput value={name} onChangeText={setName} style={styles.input} placeholder="Enter Agent Name" />
+            <Text style={styles.label}>Password</Text>
+            <TextInput value={password} onChangeText={setPassword} secureTextEntry style={styles.input} placeholder="Enter Password" />
           </>
         )}
 
@@ -218,92 +187,18 @@ const AddUserScreen: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f5f5f5',
-  },
-  scrollContainer: {
-    padding: 20,
-  },
-  scrollContainerWeb: {
-    maxWidth: 600,
-    alignSelf: 'center',
-    width: '100%',
-  },
-  label: {
-    fontSize: 16,
-    fontWeight: '600',
-    marginBottom: 8,
-    color: '#333',
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 8,
-    padding: 12,
-    marginBottom: 16,
-    backgroundColor: '#fff',
-    fontSize: 16,
-    color: '#333',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  dropdownContainer: {
-    padding: 10,
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 8,
-    marginBottom: 16,
-    backgroundColor: '#fff',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  dropdownItem: {
-    padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ddd',
-  },
-  dropdownItemText: {
-    fontSize: 16,
-    color: '#333',
-  },
-  placeholderText: {
-    fontSize: 16,
-    color: '#999',
-  },
-  loader: {
-    marginTop: 20,
-  },
-  saveButton: {
-    backgroundColor: 'orange',
-    borderRadius: 8,
-    padding: 16,
-    alignItems: 'center',
-    justifyContent: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  saveButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  topSection: {
-    width: '100%',
-    height: '10%',
-    flexDirection: 'row-reverse',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-  },
+  container: { flex: 1, backgroundColor: '#f5f5f5' },
+  scrollContainer: { padding: 20 },
+  scrollContainerWeb: { maxWidth: 600, alignSelf: 'center', width: '100%' },
+  label: { fontSize: 16, fontWeight: '600', marginBottom: 8 },
+  input: { borderWidth: 1, borderColor: '#ddd', borderRadius: 8, padding: 12, marginBottom: 16, backgroundColor: '#fff' },
+  dropdownContainer: { padding: 10, borderWidth: 1, borderColor: '#ddd', borderRadius: 8, marginBottom: 16, backgroundColor: '#fff' },
+  dropdownItem: { padding: 10, borderBottomWidth: 1, borderBottomColor: '#ddd' },
+  dropdownItemText: { fontSize: 16 },
+  placeholderText: { fontSize: 16, color: '#999' },
+  loader: { marginTop: 20 },
+  saveButton: { backgroundColor: 'orange', borderRadius: 8, padding: 16, alignItems: 'center' },
+  saveButtonText: { color: '#fff', fontSize: 16, fontWeight: '600' },
 });
 
 export default AddUserScreen;

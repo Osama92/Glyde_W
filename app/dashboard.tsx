@@ -199,7 +199,7 @@ const DashboardScreen: React.FC = () => {
             <Image source={require('../assets/images/analytics.png')} resizeMode='contain' style={{width:30, height: 30}}/>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => router.push('/addUser')} style={styles.menuItem}>
-            <Image source={require('../assets/images/shipmentIcon.png')} resizeMode='contain' style={{width:30, height: 30}}/>
+            <Image source={require('../assets/images/user.png')} resizeMode='contain' style={{width:30, height: 30}}/>
             </TouchableOpacity>
           </View>
         </View>
