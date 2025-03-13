@@ -188,14 +188,14 @@ const Analytics: React.FC = () => {
         <View style={[styles.sidebar, isMobile && styles.mobileSidebar]}>
           <Image source={require('../assets/images/Glyde.png')} resizeMode='contain' style={{width:40, height:40}}/>
           <View style={styles.menu}>
-            <TouchableOpacity onPress={() => router.push('/shipment')} style={styles.menuItem}>
+            <TouchableOpacity onPress={() => router.push('/dashboard')} style={styles.menuItem}>
               <Image source={require('../assets/images/dashboard.png')} resizeMode='contain' style={{width:30, height: 30}}/>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => router.push('/cashflow')} style={styles.menuItem}>
+            <TouchableOpacity onPress={() => router.push('/analytics')} style={styles.menuItem}>
             <Image source={require('../assets/images/analytics.png')} resizeMode='contain' style={{width:30, height: 30}}/>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => router.push('/message')} style={styles.menuItem}>
-            <Image source={require('../assets/images/shipmentIcon.png')} resizeMode='contain' style={{width:30, height: 30}}/>
+            <TouchableOpacity onPress={() => router.push('/addUser')} style={styles.menuItem}>
+            <Image source={require('../assets/images/user.png')} resizeMode='contain' style={{width:30, height: 30}}/>
             </TouchableOpacity>
           </View>
         </View>
