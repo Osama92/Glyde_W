@@ -206,6 +206,9 @@ const DashboardScreen: React.FC = () => {
             <TouchableOpacity onPress={() => router.push('/addMaterial')} style={styles.menuItem}>
             <Image source={require('../assets/images/mm2.png')} resizeMode='contain' style={{width:30, height: 30}}/>
             </TouchableOpacity>
+            <TouchableOpacity onPress={() => router.push('/onboarding_approval')} style={styles.menuItem}>
+            <Image source={require('../assets/images/approved.png')} resizeMode='contain' style={{width:30, height: 30}}/>
+            </TouchableOpacity>
           </View>
         </View>
       )}
