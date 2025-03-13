@@ -190,7 +190,9 @@ const DashboardScreen: React.FC = () => {
       {/* Left Sidebar */}
       {isSidebarVisible && (
         <View style={[styles.sidebar, isMobile && styles.mobileSidebar]}>
+          <TouchableOpacity onPress={() => router.push('/dashboard')}>
           <Image source={require('../assets/images/Glyde.png')} resizeMode='contain' style={{width:40, height:40}}/>
+          </TouchableOpacity>
           <View style={styles.menu}>
             <TouchableOpacity onPress={() => router.push('/dashboard')} style={styles.menuItem}>
               <Image source={require('../assets/images/dashboard.png')} resizeMode='contain' style={{width:30, height: 30}}/>
