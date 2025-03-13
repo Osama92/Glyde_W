@@ -184,7 +184,7 @@ const Analytics: React.FC = () => {
       )}
 
       {/* Left Sidebar */}
-      {isSidebarVisible && (
+      {/* {isSidebarVisible && (
         <View style={[styles.sidebar, isMobile && styles.mobileSidebar]}>
           <Image source={require('../assets/images/Glyde.png')} resizeMode='contain' style={{width:40, height:40}}/>
           <View style={styles.menu}>
@@ -199,7 +199,7 @@ const Analytics: React.FC = () => {
             </TouchableOpacity>
           </View>
         </View>
-      )}
+      )} */}
 
       {/* Main Content */}
       <ScrollView style={[styles.content, isMobile && isSidebarVisible && styles.contentShifted]}>
