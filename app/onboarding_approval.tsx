@@ -74,17 +74,7 @@ const MissingLoadingPointScreen = () => {
 
   return (
     <View style={styles.container}>
-       <View style={styles.topSection}>
-                      
-                        <Text style={{ fontSize: 20, fontWeight: "bold", marginTop:20 }}>Back</Text>
-                      
-                      <TouchableOpacity onPress={() => router.back()} style={{marginLeft:20, marginTop:20}}>
-                      <Image
-                        source={require("../../assets/images/Back.png")}
-                        style={{ width: 30, resizeMode: "contain", marginRight: 10 }}
-                      />
-                      </TouchableOpacity>
-                    </View>
+       
       <Text style={styles.title}>Pending Loading Points</Text>
 
       {/* List of documents with missing LoadingPoint */}
