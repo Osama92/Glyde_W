@@ -83,7 +83,7 @@
 // });
 
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, Modal, TouchableOpacity, FlatList, Image } from "react-native";
+import { View, Text, StyleSheet, Modal, TouchableOpacity, FlatList, Image, ImageBackground, ImageSourcePropType } from "react-native";
 import { db } from "../firebase"; // Adjust the path to your Firebase config
 import { collection, query, where, onSnapshot } from "firebase/firestore";
 
@@ -95,6 +95,7 @@ interface Shipment {
   statusId: number;
   mobileNumber: string;
   tonnage: string;
+  tons: number;
 }
 
 interface ShipmentDetailsProps {
@@ -117,7 +118,24 @@ const getStatusText = (statusId: number): string => {
   }
 };
 
-import { ImageSourcePropType } from "react-native";
+const getTonnage = (tons: string): number => {
+  switch (tons) {
+    case "Truck 20 ton":
+      return 20000;
+    case "Truck 10 ton":
+      return 10000;
+    case "Truck 5 ton":
+      return 5000;
+    case "Truck 3 ton":
+      return 3000;
+    case "Truck 1 ton":
+      return 1000;
+    case "Truck 0.5 ton":
+      return 500;
+    default:
+      return 0;
+  }
+};
 
 const getImage = (uri: string): ImageSourcePropType => {
   switch (uri) {
@@ -130,7 +148,7 @@ const getImage = (uri: string): ImageSourcePropType => {
     // case "Truck 3 ton":
     //   return require("../assets/truck3ton.png");
     default:
-      return require("../assets/images/Van1.jpg");
+      return require("../assets/images/Van0.png");
   }
 };
 
@@ -211,8 +229,46 @@ export default function ShipmentDetails({ selectedVehicle }: ShipmentDetailsProp
       <Text style={styles.detail}>Status: {getStatusText(shipment.statusId)}</Text>
       </View>
       </View>
-      <View style={{width:'50%', backgroundColor:'orange', height:'90%'}}>
-        <Image source={getImage(shipment.vehicleNo)} resizeMode="contain" style={{width:'100%', height:'100%'}}/>
+      <View style={{width:'50%', height:'90%'}}>
+        <Text style={{fontSize: 20, fontWeight: '700', color:'#000', marginBottom: 10, alignSelf:'center'}}>Current Truck Utilization</Text>
+
+{/* <ImageBackground
+  source={getImage(shipment.tonnage)}
+  resizeMode="cover"
+  style={{ flex: 1, width: '100%', height: '100%',alignItems:'center'}}
+>
+  <View
+    style={{
+      backgroundColor: 'orange',
+      width: '70%',
+      height: 90,
+      alignSelf: 'center',
+      marginTop: 60,
+      marginRight: 80
+    }}
+  />
+</ImageBackground> */}
+
+<ImageBackground 
+  source={getImage(shipment.tonnage)} 
+  resizeMode="cover" 
+  style={{ width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center' }}
+>
+  {/* Overlay View */}
+  <View 
+    style={{
+      position: 'absolute',
+      width: '80%', 
+      height: 200, 
+      //justifyContent: 'center', 
+      alignItems: 'center',
+      zIndex: 1, // Ensures it's in front
+    }}
+  >
+    <Text style={{ color: '#000', fontSize: 90, marginTop:10 }}>{shipment.tons/getTonnage(shipment.tonnage)*100}%</Text>
+  </View>
+</ImageBackground>
+
       </View>
 
       </View>
