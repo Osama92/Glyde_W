@@ -319,7 +319,7 @@ interface Transporter {
 }
 
 interface TruckDetails {
-  capacity: string;
+  VehicleNumber: string;
   status: string;
   arrivalDate: string;
   type: string;
@@ -427,11 +427,11 @@ export default function MapView({ onVehicleSelect }: MapView) {
             lng: driverData.Longitude,
           };
 
-          console.log("Selected Vehicle Location (Real-Time):", newLocation);
+          //console.log("Selected Vehicle Location (Real-Time):", newLocation);
 
           setVehicleLocation(newLocation);
           setTruckDetails({
-            capacity: selectedVehicle, // Example data
+            VehicleNumber: selectedVehicle,
             status: "On-Route",
             arrivalDate: "28.10.23",
             type: "Household Chemicals",
@@ -504,10 +504,7 @@ export default function MapView({ onVehicleSelect }: MapView) {
               {showInfoWindow && (
                 <InfoWindow onCloseClick={() => setShowInfoWindow(false)}>
                   <View style={styles.infoWindow}>
-                    <Text style={styles.detailText}>Capacity: {truckDetails?.capacity}</Text>
-                    <Text style={styles.detailText}>Status: {truckDetails?.status}</Text>
-                    <Text style={styles.detailText}>Arrival Date: {truckDetails?.arrivalDate}</Text>
-                    <Text style={styles.detailText}>Type: {truckDetails?.type}</Text>
+                    <Text style={styles.detailText}>Truck Number: {truckDetails?.VehicleNumber}</Text>
                   </View>
                 </InfoWindow>
               )}

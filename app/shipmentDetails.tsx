@@ -141,8 +141,8 @@ const getImage = (uri: string): ImageSourcePropType => {
   switch (uri) {
     case "Truck 20 ton":
       return require("../assets/images/Truck_20_ton.png");
-    // case "Truck 10 ton":
-    //   return require("../assets/truck10ton.png");
+    case "Truck 30 ton":
+      return require("../assets/images/Truck_30_ton.png");
     // case "Truck 5 ton":
     //   return require("../assets/truck5ton.png");
     // case "Truck 3 ton":
@@ -228,26 +228,20 @@ export default function ShipmentDetails({ selectedVehicle }: ShipmentDetailsProp
       <Image source={require('../assets/images/box.png')} resizeMode="contain" style={{width:20, height:20, marginLeft: 10}}/>
       <Text style={styles.detail}>Status: {getStatusText(shipment.statusId)}</Text>
       </View>
+
+      <View style={{width:200, height:60}}>
+      {shipment.statusId && (
+        <TouchableOpacity
+          style={styles.seeAllButton}
+          onPress={() => setModalVisible(true)}
+        >
+          <Text style={styles.seeAllButtonText}>View all shipment</Text>
+        </TouchableOpacity>
+      )}
+      </View>
       </View>
       <View style={{width:'50%', height:'90%'}}>
         <Text style={{fontSize: 20, fontWeight: '700', color:'#000', marginBottom: 10, alignSelf:'center'}}>Current Truck Utilization</Text>
-
-{/* <ImageBackground
-  source={getImage(shipment.tonnage)}
-  resizeMode="cover"
-  style={{ flex: 1, width: '100%', height: '100%',alignItems:'center'}}
->
-  <View
-    style={{
-      backgroundColor: 'orange',
-      width: '70%',
-      height: 90,
-      alignSelf: 'center',
-      marginTop: 60,
-      marginRight: 80
-    }}
-  />
-</ImageBackground> */}
 
 <ImageBackground 
   source={getImage(shipment.tonnage)} 
@@ -260,12 +254,11 @@ export default function ShipmentDetails({ selectedVehicle }: ShipmentDetailsProp
       position: 'absolute',
       width: '80%', 
       height: 200, 
-      //justifyContent: 'center', 
       alignItems: 'center',
-      zIndex: 1, // Ensures it's in front
+      zIndex: 1, 
     }}
   >
-    <Text style={{ color: '#000', fontSize: 90, marginTop:10 }}>{shipment.tons/getTonnage(shipment.tonnage)*100}%</Text>
+    <Text style={{ color: '#000', fontSize: 90, marginTop:10, fontWeight:'bold' }}>{shipment.tons/getTonnage(shipment.tonnage)*100}%</Text>
   </View>
 </ImageBackground>
 
@@ -273,16 +266,6 @@ export default function ShipmentDetails({ selectedVehicle }: ShipmentDetailsProp
 
       </View>
       
-
-      {/* Show "See All" button if statusId is less than 4 */}
-      {shipment.statusId < 4 && (
-        <TouchableOpacity
-          style={styles.seeAllButton}
-          onPress={() => setModalVisible(true)}
-        >
-          <Text style={styles.seeAllButtonText}>View all shipment</Text>
-        </TouchableOpacity>
-      )}
 
       {/* Modal to display all shipments */}
       <Modal
@@ -349,8 +332,9 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   seeAllButtonText: {
-    color: "#fff",
-    fontSize: 12,
+    color: "#FF6500",
+    fontSize: 13,
+    fontWeight:'600'
   },
   modalContainer: {
     flex: 1,

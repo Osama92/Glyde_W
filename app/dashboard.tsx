@@ -212,6 +212,9 @@ const DashboardScreen: React.FC = () => {
             <TouchableOpacity onPress={() => router.push('/dashboard')} style={styles.menuItem}>
               <Image source={require('../assets/images/dashboard.png')} resizeMode='contain' style={{width:30, height: 30}}/>
             </TouchableOpacity>
+            <TouchableOpacity onPress={() => router.push('/dashboard')} style={styles.menuItem}>
+              <Image source={require('../assets/images/tracking.png')} resizeMode='contain' style={{width:30, height: 30}}/>
+            </TouchableOpacity>
             <TouchableOpacity onPress={() => router.push('/analytics')} style={styles.menuItem}>
             <Image source={require('../assets/images/analytics.png')} resizeMode='contain' style={{width:30, height: 30}}/>
             </TouchableOpacity>
@@ -429,8 +432,8 @@ const styles = StyleSheet.create({
   },
   menuItem: {
     marginBottom: 30,
-    width:50,
-    height:50,
+    width:40,
+    height:40,
     backgroundColor:'#F9f9f9',
     borderRadius: 5,
     justifyContent:'center',
