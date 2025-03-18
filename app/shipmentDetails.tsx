@@ -83,7 +83,7 @@
 // });
 
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, Modal, TouchableOpacity, FlatList } from "react-native";
+import { View, Text, StyleSheet, Modal, TouchableOpacity, FlatList, Image } from "react-native";
 import { db } from "../firebase"; // Adjust the path to your Firebase config
 import { collection, query, where, onSnapshot } from "firebase/firestore";
 
@@ -94,6 +94,7 @@ interface Shipment {
   route: string;
   statusId: number;
   mobileNumber: string;
+  tonnage: string;
 }
 
 interface ShipmentDetailsProps {
@@ -116,6 +117,23 @@ const getStatusText = (statusId: number): string => {
   }
 };
 
+import { ImageSourcePropType } from "react-native";
+
+const getImage = (uri: string): ImageSourcePropType => {
+  switch (uri) {
+    case "Truck 20 ton":
+      return require("../assets/images/Truck_20_ton.png");
+    // case "Truck 10 ton":
+    //   return require("../assets/truck10ton.png");
+    // case "Truck 5 ton":
+    //   return require("../assets/truck5ton.png");
+    // case "Truck 3 ton":
+    //   return require("../assets/truck3ton.png");
+    default:
+      return require("../assets/images/Van1.jpg");
+  }
+};
+
 export default function ShipmentDetails({ selectedVehicle }: ShipmentDetailsProps) {
   const [shipment, setShipment] = useState<Shipment | null>(null);
   const [allShipments, setAllShipments] = useState<Shipment[]>([]);
@@ -134,6 +152,7 @@ export default function ShipmentDetails({ selectedVehicle }: ShipmentDetailsProp
           querySnapshot.forEach((doc) => {
             const shipmentData = doc.data() as Shipment;
             shipments.push(shipmentData);
+            console.log(shipmentData);
           });
 
           setShipment(shipments[0]); // Display the first shipment by default
@@ -165,11 +184,38 @@ export default function ShipmentDetails({ selectedVehicle }: ShipmentDetailsProp
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Shipment Details</Text>
+      <View style={{flexDirection:'row', justifyContent:'space-between', height:'100%'}}>
+    
+      <View style={{width:'50%', height:'90%', flexDirection:'row', flexWrap:'wrap', alignItems:'center'}}>
+      <View style={{width:200, height: 60, backgroundColor:'#F7F7F7', borderRadius: 10, justifyContent:'center', alignItems:'flex-start', flexDirection:'column', marginRight: 10}}>
+      <Image source={require('../assets/images/truck1.png')} resizeMode="contain" style={{width:20, height:20, marginLeft: 10}}/>
       <Text style={styles.detail}>Transporter: {shipment.transporter}</Text>
-      <Text style={styles.detail}>Transporter: {shipment.vehicleNo}</Text>
-      <Text style={styles.detail}>Driver Name: {shipment.driverName}</Text>
-      <Text style={styles.detail}>Route: {shipment.route}</Text>
+      </View>
+      <View style={{width:200, height: 60, backgroundColor:'#F7F7F7', borderRadius: 10, justifyContent:'center', alignItems:'flex-start', flexDirection:'column', marginRight: 10}}>
+      <Image source={require('../assets/images/user1.png')} resizeMode="contain" style={{width:15, height:15, marginLeft: 10}}/>
+      <Text style={styles.detail}>Driver: {shipment.driverName}</Text>
+      </View>
+
+      <View style={{width:200, height: 60, backgroundColor:'#F7F7F7', borderRadius: 10, justifyContent:'center', alignItems:'flex-start', flexDirection:'column', marginRight: 10}}>
+      <Image source={require('../assets/images/dive.png')} resizeMode="contain" style={{width:20, height:20, marginLeft: 10}}/>
+      <Text style={styles.detail}>Driver: {shipment.vehicleNo}</Text>
+      </View>
+
+      <View style={{width:200, height: 60, backgroundColor:'#F7F7F7', borderRadius: 10, justifyContent:'center', alignItems:'flex-start', flexDirection:'column', marginRight: 10}}>
+      <Image source={require('../assets/images/cap.png')} resizeMode="contain" style={{width:20, height:20, marginLeft: 10}}/>
+      <Text style={styles.detail}>Driver: {shipment.tonnage}</Text>
+      </View>
+
+      <View style={{width:200, height: 60, backgroundColor:'#F7F7F7', borderRadius: 10, justifyContent:'center', alignItems:'flex-start', flexDirection:'column', marginRight: 10}}>
+      <Image source={require('../assets/images/box.png')} resizeMode="contain" style={{width:20, height:20, marginLeft: 10}}/>
       <Text style={styles.detail}>Status: {getStatusText(shipment.statusId)}</Text>
+      </View>
+      </View>
+      <View style={{width:'50%', backgroundColor:'orange', height:'90%'}}>
+        <Image source={getImage(shipment.vehicleNo)} resizeMode="contain" style={{width:'100%', height:'100%'}}/>
+      </View>
+
+      </View>
       
 
       {/* Show "See All" button if statusId is less than 4 */}
@@ -220,22 +266,23 @@ export default function ShipmentDetails({ selectedVehicle }: ShipmentDetailsProp
 const styles = StyleSheet.create({
   container: {
     padding: 16,
-    backgroundColor: "#FE7A36",
+    backgroundColor: "#EEEEEE",
     borderRadius: 20,
     // margin: 16,
-    justifyContent: "center",
+    //justifyContent: "center",
     flex: 1,
   },
   title: {
     fontSize: 28,
     fontWeight: "bold",
-    marginBottom: 15,
-    color:'#fff'
+    //marginBottom: 15,
+    color:'#000'
   },
   detail: {
     fontSize: 14,
     marginBottom: 4,
-    color:'#fff'
+    color:'#000',
+    marginLeft: 10,
     
   },
   seeAllButton: {

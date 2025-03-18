@@ -19,6 +19,17 @@ import { useRouter } from 'expo-router';
 import MapView from './mapView';
 import ShipmentDetails from "../app/shipmentDetails";
 import TruckCapacity from "../app/truckCapacity";
+import  VehicleImage  from '../app/vehicleImage';
+import { Vehicle } from '../types';
+
+
+const vehicles: Vehicle[] = [
+  { id: '1', name: 'Bus 3 Tons', imageUrl: 'https://example.com/bus-3-ton.jpg' },
+  { id: '2', name: 'Truck 5 Tons', imageUrl: 'https://example.com/truck-5-ton.jpg' },
+  { id: '3', name: 'Van 1 Ton', imageUrl: 'https://example.com/van-1-ton.jpg' },
+];
+
+
 
 const db = getFirestore(app);
 
@@ -38,6 +49,10 @@ const DashboardScreen: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedVehicle, setSelectedVehicle] = useState<string>("");
   const router = useRouter(); // Initialize router for navigation
+
+
+
+ 
 
   // Fetch shipments and deliveries from Firebase
   useEffect(() => {
@@ -224,9 +239,9 @@ const DashboardScreen: React.FC = () => {
           <Text style={styles.sectionTitle1}>Hello Admin 👋🏻</Text>
           <Text style={styles.sectionTitle}>Track Delivery Vehicles</Text>
           <MapView onVehicleSelect={(vehicle) => setSelectedVehicle(vehicle)}/>
-          <View style={{flexDirection:'row', justifyContent:'space-between', width:600, margin: 16,}}>
+          <View style={{flexDirection:'row', justifyContent:'space-between', width:'100%', height: 350, padding: 16}}>
           <ShipmentDetails selectedVehicle={selectedVehicle} />
-          <TruckCapacity selectedVehicle={selectedVehicle} />
+          {/* <TruckCapacity selectedVehicle={selectedVehicle} /> */}
           </View>
           <View style={styles.analyticsGrid}>
             <View style={styles.analyticsCard}>
