@@ -294,20 +294,7 @@ const DashboardScreen: React.FC = () => {
           <ShipmentDetails selectedVehicle={selectedVehicle} />
         
           </View>
-          <View style={styles.analyticsGrid}>
-            <View style={styles.analyticsCard}>
-              <Text style={styles.analyticsCardTitle}>Shipment</Text>
-              <Text style={styles.analyticsCardValue}>{totalShipments}</Text>
-            </View>
-            <View style={styles.analyticsCard}>
-              <Text style={styles.analyticsCardTitle}>Freight Cost</Text>
-              <Text style={styles.analyticsCardValue}>₦{totalFreightCost.toFixed(2)}</Text>
-            </View>
-            <View style={styles.analyticsCard}>
-              <Text style={styles.analyticsCardTitle}>Message</Text>
-              <Text style={styles.analyticsCardValue}>15</Text>
-            </View>
-          </View>
+         
         </View>
         {/* Recent Shipment Section */}
         <View style={styles.section}>
@@ -317,6 +304,7 @@ const DashboardScreen: React.FC = () => {
             placeholder="Search by Delivery Number"
             value={searchQuery}
             onChangeText={setSearchQuery}
+            placeholderTextColor={'#666'}
           />
         </View>
           <View style={styles.table}>
@@ -456,10 +444,9 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   sectionTitle: {
-    fontSize: 20,
+    fontSize: 30,
     fontWeight: 'bold',
     marginBottom: 10,
-    //marginLeft: 15
   },
   sectionTitle1: {
     fontSize: 40,
