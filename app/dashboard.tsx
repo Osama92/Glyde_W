@@ -9,25 +9,17 @@ import {
   Modal,
   Pressable,
   TextInput,
-  Image
+  Image,
+  ActivityIndicator
 } from 'react-native';
-import { BarChart, LineChart, PieChart } from 'react-native-gifted-charts';
 import { MaterialIcons } from '@expo/vector-icons';
 import { getFirestore, collection, getDocs, query } from 'firebase/firestore';
 import { app } from '../firebase';
 import { useRouter } from 'expo-router'; 
 import MapView from './mapView';
 import ShipmentDetails from "../app/shipmentDetails";
-import TruckCapacity from "../app/truckCapacity";
-import  VehicleImage  from '../app/vehicleImage';
-import { Vehicle } from '../types';
+import { useFonts } from 'expo-font';
 
-
-const vehicles: Vehicle[] = [
-  { id: '1', name: 'Bus 3 Tons', imageUrl: 'https://example.com/bus-3-ton.jpg' },
-  { id: '2', name: 'Truck 5 Tons', imageUrl: 'https://example.com/truck-5-ton.jpg' },
-  { id: '3', name: 'Van 1 Ton', imageUrl: 'https://example.com/van-1-ton.jpg' },
-];
 
 
 
@@ -50,6 +42,14 @@ const DashboardScreen: React.FC = () => {
   const [selectedVehicle, setSelectedVehicle] = useState<string>("");
   const router = useRouter();
   const [hoveredItem, setHoveredItem] = useState(null);
+
+
+
+
+  const [fontsLoaded] = useFonts({
+    OpenSans: require('../assets/fonts/OpenSans.ttf'),
+    Roboto: require('../assets/fonts/Roboto.ttf'),
+  });
 
 
 
@@ -106,11 +106,7 @@ const DashboardScreen: React.FC = () => {
     delivery.deliveryNumber.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  // Calculate total number of shipments
-  const totalShipments = shipments.length;
 
-  // Calculate total freight cost
-  const totalFreightCost = shipments.reduce((sum, shipment) => sum + (shipment.freightCost || 0), 0);
 
   // Fetch materials for a delivery
   const fetchMaterials = async (deliveryId: string, shipmentId: string) => {
@@ -168,7 +164,16 @@ const DashboardScreen: React.FC = () => {
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
+         <ActivityIndicator size="large" color="orange" />
         <Text>Loading...</Text>
+      </View>
+    );
+  }
+
+  if (!fontsLoaded) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="orange" />
       </View>
     );
   }
@@ -199,7 +204,7 @@ const DashboardScreen: React.FC = () => {
             onHoverOut={handleHoverOut}
           >
             <Image
-              source={require('../assets/images/dashboard.png')}
+              source={require('../assets/images/dashC.png')}
               resizeMode="contain"
               style={{ width: 30, height: 30 }}
             />
@@ -213,7 +218,7 @@ const DashboardScreen: React.FC = () => {
             onHoverOut={handleHoverOut}
           >
             <Image
-              source={require('../assets/images/tracking.png')}
+              source={require('../assets/images/tracC.png')}
               resizeMode="contain"
               style={{ width: 30, height: 30 }}
             />
@@ -227,7 +232,7 @@ const DashboardScreen: React.FC = () => {
             onHoverOut={handleHoverOut}
           >
             <Image
-              source={require('../assets/images/analytics.png')}
+              source={require('../assets/images/analyticsC.png')}
               resizeMode="contain"
               style={{ width: 30, height: 30 }}
             />
@@ -241,7 +246,7 @@ const DashboardScreen: React.FC = () => {
             onHoverOut={handleHoverOut}
           >
             <Image
-              source={require('../assets/images/user.png')}
+              source={require('../assets/images/userC.png')}
               resizeMode="contain"
               style={{ width: 30, height: 30 }}
             />
@@ -255,7 +260,7 @@ const DashboardScreen: React.FC = () => {
             onHoverOut={handleHoverOut}
           >
             <Image
-              source={require('../assets/images/mm2.png')}
+              source={require('../assets/images/matC.png')}
               resizeMode="contain"
               style={{ width: 30, height: 30 }}
             />
@@ -269,7 +274,7 @@ const DashboardScreen: React.FC = () => {
             onHoverOut={handleHoverOut}
           >
             <Image
-              source={require('../assets/images/approved.png')}
+              source={require('../assets/images/approvedC.png')}
               resizeMode="contain"
               style={{ width: 30, height: 30 }}
             />
@@ -285,7 +290,7 @@ const DashboardScreen: React.FC = () => {
         <View style={styles.searchContainer}>
 
 
-        {/* Analytics Section */}
+       
         <View style={styles.section}>
           <Text style={styles.sectionTitle1}>Hello Admin 👋🏻</Text>
           <Text style={styles.sectionTitle}>Track Delivery Vehicles</Text>
@@ -445,13 +450,14 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 30,
-    fontWeight: 'bold',
     marginBottom: 10,
+    fontFamily: 'OpenSans',
   },
   sectionTitle1: {
     fontSize: 40,
     fontWeight: 'bold',
-    marginBottom: 40,
+    //marginBottom: 40,
+    fontFamily: 'Roboto'
     
   },
   sectionSubtitle: {

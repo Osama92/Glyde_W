@@ -135,12 +135,12 @@ export default function ShipmentDetails({ selectedVehicle }: ShipmentDetailsProp
 
       <View style={{width:200, height: 60, backgroundColor:'#F7F7F7', borderRadius: 10, justifyContent:'center', alignItems:'flex-start', flexDirection:'column', marginRight: 10}}>
       <Image source={require('../assets/images/dive.png')} resizeMode="contain" style={{width:20, height:20, marginLeft: 10}}/>
-      <Text style={styles.detail}>Driver: {shipment.vehicleNo}</Text>
+      <Text style={styles.detail}>Licence No.: {shipment.vehicleNo}</Text>
       </View>
 
       <View style={{width:200, height: 60, backgroundColor:'#F7F7F7', borderRadius: 10, justifyContent:'center', alignItems:'flex-start', flexDirection:'column', marginRight: 10}}>
       <Image source={require('../assets/images/cap.png')} resizeMode="contain" style={{width:20, height:20, marginLeft: 10}}/>
-      <Text style={styles.detail}>Driver: {shipment.tonnage}</Text>
+      <Text style={styles.detail}>Capacity: {shipment.tonnage}</Text>
       </View>
 
       <View style={{width:200, height: 60, backgroundColor:'#F7F7F7', borderRadius: 10, justifyContent:'center', alignItems:'flex-start', flexDirection:'column', marginRight: 10}}>
