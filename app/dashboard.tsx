@@ -48,8 +48,18 @@ const DashboardScreen: React.FC = () => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedVehicle, setSelectedVehicle] = useState<string>("");
-  const router = useRouter(); // Initialize router for navigation
+  const router = useRouter();
+  const [hoveredItem, setHoveredItem] = useState(null);
 
+
+
+  const handleHoverIn = (item: any) => {
+    setHoveredItem(item);
+  };
+
+  const handleHoverOut = () => {
+    setHoveredItem(null);
+  };
 
 
  
@@ -154,33 +164,6 @@ const DashboardScreen: React.FC = () => {
     }
   };
 
-  // Sample data for the graphs
-  const barData = [
-    { value: 120, label: 'Oct 30' },
-    { value: 150, label: 'Oct 31' },
-    { value: 200, label: 'Nov 01' },
-    { value: 180, label: 'Nov 02' },
-    { value: 220, label: 'Nov 03' },
-    { value: 250, label: 'Nov 04' },
-    { value: 300, label: 'Nov 05' },
-  ];
-
-  const lineData = [
-    { value: 120, label: 'Oct 30' },
-    { value: 150, label: 'Oct 31' },
-    { value: 200, label: 'Nov 01' },
-    { value: 180, label: 'Nov 02' },
-    { value: 220, label: 'Nov 03' },
-    { value: 250, label: 'Nov 04' },
-    { value: 300, label: 'Nov 05' },
-  ];
-
-  const pieData = [
-    { value: 40, color: '#FFA500', label: 'Loaded' },
-    { value: 30, color: '#007BFF', label: 'Dispatched' },
-    { value: 20, color: '#6F42C1', label: 'In Transit' },
-    { value: 10, color: '#28A745', label: 'Delivered' },
-  ];
 
   if (loading) {
     return (
@@ -202,34 +185,99 @@ const DashboardScreen: React.FC = () => {
         </TouchableOpacity>
       )}
 
-      {/* Left Sidebar */}
-      {isSidebarVisible && (
-        <View style={[styles.sidebar, isMobile && styles.mobileSidebar]}>
-          <TouchableOpacity onPress={() => router.push('/dashboard')}>
-          <Image source={require('../assets/images/Glyde.png')} resizeMode='contain' style={{width:40, height:40}}/>
-          </TouchableOpacity>
-          <View style={styles.menu}>
-            <TouchableOpacity onPress={() => router.push('/dashboard')} style={styles.menuItem}>
-              <Image source={require('../assets/images/dashboard.png')} resizeMode='contain' style={{width:30, height: 30}}/>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => router.push('/dashboard')} style={styles.menuItem}>
-              <Image source={require('../assets/images/tracking.png')} resizeMode='contain' style={{width:30, height: 30}}/>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => router.push('/analytics')} style={styles.menuItem}>
-            <Image source={require('../assets/images/analytics.png')} resizeMode='contain' style={{width:30, height: 30}}/>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => router.push('/addUser')} style={styles.menuItem}>
-            <Image source={require('../assets/images/user.png')} resizeMode='contain' style={{width:30, height: 30}}/>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => router.push('/addMaterial')} style={styles.menuItem}>
-            <Image source={require('../assets/images/mm2.png')} resizeMode='contain' style={{width:30, height: 30}}/>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => router.push('/onboarding_approval')} style={styles.menuItem}>
-            <Image source={require('../assets/images/approved.png')} resizeMode='contain' style={{width:30, height: 30}}/>
-            </TouchableOpacity>
-          </View>
+     {/* Left Sidebar */}
+    {isSidebarVisible && (
+      <View style={[styles.sidebar, isMobile && styles.mobileSidebar]}>
+        <TouchableOpacity onPress={() => router.push('/dashboard')}>
+          <Image source={require('../assets/images/Glyde.png')} resizeMode='contain' style={{ width: 40, height: 40 }} />
+        </TouchableOpacity>
+        <View style={styles.menu}>
+          <Pressable
+            onPress={() => router.push('/dashboard')}
+            style={styles.menuItem}
+            onHoverIn={() => handleHoverIn('dashboard')}
+            onHoverOut={handleHoverOut}
+          >
+            <Image
+              source={require('../assets/images/dashboard.png')}
+              resizeMode="contain"
+              style={{ width: 30, height: 30 }}
+            />
+            {hoveredItem === 'dashboard' && <Text style={styles.tooltip}>Dashboard</Text>}
+          </Pressable>
+
+          <Pressable
+            //onPress={() => router.push('/tracking')}
+            style={styles.menuItem}
+            onHoverIn={() => handleHoverIn('tracking')}
+            onHoverOut={handleHoverOut}
+          >
+            <Image
+              source={require('../assets/images/tracking.png')}
+              resizeMode="contain"
+              style={{ width: 30, height: 30 }}
+            />
+            {hoveredItem === 'tracking' && <Text style={styles.tooltip}>Track</Text>}
+          </Pressable>
+
+          <Pressable
+            onPress={() => router.push('/analytics')}
+            style={styles.menuItem}
+            onHoverIn={() => handleHoverIn('analytics')}
+            onHoverOut={handleHoverOut}
+          >
+            <Image
+              source={require('../assets/images/analytics.png')}
+              resizeMode="contain"
+              style={{ width: 30, height: 30 }}
+            />
+            {hoveredItem === 'analytics' && <Text style={styles.tooltip}>Analytics</Text>}
+          </Pressable>
+
+          <Pressable
+            onPress={() => router.push('/addUser')}
+            style={styles.menuItem}
+            onHoverIn={() => handleHoverIn('addUser')}
+            onHoverOut={handleHoverOut}
+          >
+            <Image
+              source={require('../assets/images/user.png')}
+              resizeMode="contain"
+              style={{ width: 30, height: 30 }}
+            />
+            {hoveredItem === 'addUser' && <Text style={styles.tooltip}>Add User</Text>}
+          </Pressable>
+
+          <Pressable
+            onPress={() => router.push('/addMaterial')}
+            style={styles.menuItem}
+            onHoverIn={() => handleHoverIn('addMaterial')}
+            onHoverOut={handleHoverOut}
+          >
+            <Image
+              source={require('../assets/images/mm2.png')}
+              resizeMode="contain"
+              style={{ width: 30, height: 30 }}
+            />
+            {hoveredItem === 'addMaterial' && <Text style={styles.tooltip}>Add Material</Text>}
+          </Pressable>
+
+          <Pressable
+            onPress={() => router.push('/onboarding_approval')}
+            style={styles.menuItem}
+            onHoverIn={() => handleHoverIn('onboarding_approval')}
+            onHoverOut={handleHoverOut}
+          >
+            <Image
+              source={require('../assets/images/approved.png')}
+              resizeMode="contain"
+              style={{ width: 30, height: 30 }}
+            />
+            {hoveredItem === 'onboarding_approval' && <Text style={styles.tooltip}>Onboarding Approval</Text>}
+          </Pressable>
         </View>
-      )}
+      </View>
+    )}
 
       {/* Main Content */}
       <ScrollView style={[styles.content, isMobile && isSidebarVisible && styles.contentShifted]}>
@@ -244,7 +292,7 @@ const DashboardScreen: React.FC = () => {
           <MapView onVehicleSelect={(vehicle) => setSelectedVehicle(vehicle)}/>
           <View style={{flexDirection:'row', justifyContent:'space-between', width:'100%', height: 350, padding: 16}}>
           <ShipmentDetails selectedVehicle={selectedVehicle} />
-          {/* <TruckCapacity selectedVehicle={selectedVehicle} /> */}
+        
           </View>
           <View style={styles.analyticsGrid}>
             <View style={styles.analyticsCard}>
@@ -261,63 +309,9 @@ const DashboardScreen: React.FC = () => {
             </View>
           </View>
         </View>
-
-        {/* Charts Section */}
-        <View style={styles.chartsContainer}>
-          <View style={styles.chart}>
-            <Text style={styles.sectionTitle}>Shipment Metrics</Text>
-            <BarChart
-              data={barData}
-              barWidth={isMobile ? 30 : 40}
-              spacing={20}
-              roundedTop
-              roundedBottom
-              frontColor="#FFA500"
-              yAxisThickness={0}
-              xAxisThickness={0}
-              noOfSections={5}
-              yAxisTextStyle={{ color: '#666' }}
-              xAxisLabelTextStyle={{ color: '#666', textAlign: 'center' }}
-              showReferenceLine1
-              referenceLine1Position={200}
-              referenceLine1Config={{ color: 'red', dashWidth: 2, dashGap: 3 }}
-            />
-          </View>
-          <View style={styles.chart}>
-            <Text style={styles.sectionTitle}>Shipment Trends</Text>
-            <LineChart
-              data={lineData}
-              width={isMobile ? width - 40 : 300}
-              height={200}
-              color="#007BFF"
-              dataPointsColor="#007BFF"
-              dataPointsRadius={5}
-              yAxisThickness={0}
-              xAxisThickness={0}
-              noOfSections={5}
-              yAxisTextStyle={{ color: '#666' }}
-              xAxisLabelTextStyle={{ color: '#666', textAlign: 'center' }}
-            />
-          </View>
-        </View>
-
-        {/* Pie Chart Section */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Shipment Status</Text>
-          <PieChart
-            data={pieData}
-            radius={100}
-            innerRadius={50}
-            centerLabelComponent={() => (
-              <Text style={{ fontSize: 16, color: '#333' }}>Status</Text>
-            )}
-          />
-        </View>
-
         {/* Recent Shipment Section */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Recent Shipment</Text>
-          <Text style={styles.sectionSubtitle}>This data from October 30 - November 05</Text>
           <TextInput
             style={styles.searchInput}
             placeholder="Search by Delivery Number"
@@ -455,6 +449,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 10,
     fontSize: 16,
+    borderColor: '#ccc',
+    borderWidth: 1,
   },
   section: {
     marginBottom: 30,
@@ -463,7 +459,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 10,
-    marginLeft: 15
+    //marginLeft: 15
   },
   sectionTitle1: {
     fontSize: 40,
@@ -605,6 +601,17 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     color: '#fff',
+  },
+ 
+  tooltip: {
+    position: 'absolute',
+    top: -25,
+    backgroundColor: 'black',
+    color: 'white',
+    padding: 5,
+    borderRadius: 5,
+    fontSize: 10,
+    textAlign:'center'
   },
 });
 
