@@ -452,7 +452,7 @@ const styles = StyleSheet.create({
     fontSize: 40,
     fontWeight: 'bold',
     marginBottom: 40,
-    marginLeft: 15
+    
   },
   sectionSubtitle: {
     fontSize: 14,

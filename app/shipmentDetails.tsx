@@ -113,7 +113,10 @@ export default function ShipmentDetails({ selectedVehicle }: ShipmentDetailsProp
 
   if (loading) return <Text>Loading shipment details...</Text>;
   if (error) return <Text>{error}</Text>;
-  if (!shipment) return <Text>No shipment found for the selected vehicle.</Text>;
+  if (!shipment) return <View style={{flex:1, justifyContent:'center', alignItems:'center', width: '100%', height: '100%'}}>
+    <Text style={{textAlign:'center',fontSize: 30, color:'#666'}}>No shipment found for the selected vehicle.</Text>
+    <Text style={{fontStyle:'italic'}}>Select a Transporter and Vehicle for shipment details</Text>
+  </View>;
 
   return (
     <View style={styles.container}>
