@@ -59,10 +59,10 @@ const getImage = (uri: string): ImageSourcePropType => {
       return require("../assets/images/Truck_20_ton.png");
     case "Truck 30 ton":
       return require("../assets/images/Truck_30_ton.png");
-    // case "Truck 5 ton":
-    //   return require("../assets/truck5ton.png");
-    // case "Truck 3 ton":
-    //   return require("../assets/truck3ton.png");
+    case "Truck 10 ton":
+      return require("../assets/images/Truck_10_ton.png");
+    case "Truck 3 ton":
+      return require("../assets/images/Truck_3_ton.png");
     default:
       return require("../assets/images/Van0.png");
   }
@@ -165,7 +165,7 @@ export default function ShipmentDetails({ selectedVehicle }: ShipmentDetailsProp
 <ImageBackground 
   source={getImage(shipment.tonnage)} 
   resizeMode="cover" 
-  style={{ width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center' }}
+  style={{ width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center',marginBottom: 10 }}
 >
   {/* Overlay View */}
   <View 
@@ -177,7 +177,7 @@ export default function ShipmentDetails({ selectedVehicle }: ShipmentDetailsProp
       zIndex: 1, 
     }}
   >
-    <Text style={{ color: '#000', fontSize: 90, marginTop:10, fontWeight:'bold' }}>{shipment.tons/getTonnage(shipment.tonnage)*100}%</Text>
+    <Text style={{ color: '#000', fontSize: 90, marginTop:10, fontWeight:'bold' }}>{(getTonnage(shipment.tonnage)-shipment.tons)/getTonnage(shipment.tonnage)*100}%</Text>
   </View>
 </ImageBackground>
 
