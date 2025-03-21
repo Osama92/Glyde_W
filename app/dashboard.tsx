@@ -29,7 +29,6 @@ const DashboardScreen: React.FC = () => {
   const [shipments, setShipments] = useState<any[]>([]);
   const [deliveries, setDeliveries] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedDelivery, setSelectedDelivery] = useState<any>(null);
   const [materials, setMaterials] = useState<any[]>([]);
   const [isModalVisible, setModalVisible] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');

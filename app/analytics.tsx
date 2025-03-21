@@ -218,7 +218,7 @@ const Analytics: React.FC = () => {
             </View>
             <View style={styles.analyticsCard}>
               <Text style={styles.analyticsCardTitle}>Freight Cost</Text>
-              <Text style={styles.analyticsCardValue}>₦{totalFreightCost.toFixed(2)}</Text>
+              <Text style={styles.analyticsCardValue}>₦{totalFreightCost}</Text>
             </View>
             <View style={styles.analyticsCard}>
               <Text style={styles.analyticsCardTitle}>Message</Text>
