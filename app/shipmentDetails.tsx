@@ -177,7 +177,7 @@ export default function ShipmentDetails({ selectedVehicle }: ShipmentDetailsProp
       zIndex: 1, 
     }}
   >
-    <Text style={{ color: '#000', fontSize: 90, marginTop:10, fontWeight:'bold' }}>{(getTonnage(shipment.tonnage)-shipment.tons)/getTonnage(shipment.tonnage)*100}%</Text>
+    <Text style={{ color: '#000', fontSize: 90, marginTop:10, fontWeight:'bold' }}>{parseFloat((((getTonnage(shipment.tonnage) - shipment.tons) / getTonnage(shipment.tonnage)) * 100).toFixed(2))}%</Text>
   </View>
 </ImageBackground>
 
