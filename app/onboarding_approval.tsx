@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, Text, FlatList, TouchableOpacity, Modal, TextInput, StyleSheet, ActivityIndicator, Image } from "react-native";
 import { collection, query, where, getDocs, updateDoc, doc, getFirestore } from "firebase/firestore";
 import { app } from "../firebase";
-import {router} from 'expo-router'
+
 
 const db = getFirestore(app);
 
@@ -88,7 +88,7 @@ const MissingLoadingPointScreen = () => {
           </TouchableOpacity>
         )}
         ListEmptyComponent={
-          <Text style={styles.emptyText}>No documents with missing LoadingPoint found.</Text>
+          <Text style={styles.emptyText}>No Truck with missing LoadingPoint found.</Text>
         }
       />
 
