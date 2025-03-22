@@ -482,7 +482,7 @@ const AddUserScreen: React.FC = () => {
 
         {/* Right Side Form */}
         <ScrollView contentContainerStyle={styles.scrollContainer}>
-          <Text style={styles.title}>Add New User</Text>
+          <Text style={styles.title}>Create New User</Text>
           <Text style={styles.label}>Select Access Level</Text>
           <RNPickerSelect
             onValueChange={(value) => setSelectedCollection(value)}
@@ -644,7 +644,7 @@ const styles = StyleSheet.create({
   image: { width: '100%', height: '100%', backgroundColor:'#fff' },
   scrollContainer: { flex: 2, padding: 20, justifyContent: 'center' },
   title: { fontSize: 24, fontWeight: 'bold', marginBottom: 20, textAlign: 'center' },
-  label: { fontSize: 16, fontWeight: '600', marginBottom: 8, color: '#333' },
+  label: { fontSize: 16, fontWeight: '600', marginBottom: 8, color: '#333'},
   input: {
     borderWidth: 1,
     borderColor: '#ddd',
@@ -676,15 +676,14 @@ const pickerSelectStyles = StyleSheet.create({
     marginBottom: 16,
     backgroundColor: '#fff',
   },
-  inputAndroid: {
-    fontSize: 16,
-    padding: 12,
+  inputWeb: {
     borderWidth: 1,
     borderColor: '#ddd',
     borderRadius: 8,
-    color: '#333',
+    padding: 12,
     marginBottom: 16,
     backgroundColor: '#fff',
+    fontSize: 16,
   },
 });
 
