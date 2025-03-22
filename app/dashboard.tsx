@@ -842,6 +842,7 @@ const DashboardScreen: React.FC = () => {
         <View style={styles.searchContainer}>
           <View style={styles.section}>
             <Text style={styles.sectionTitle1}>Hello Admin 👋🏻</Text>
+            <Text style={styles.sectionTitle}>Topline Summary</Text>
             <CountCards />
             <Text style={styles.sectionTitle}>Track Delivery Vehicles</Text>
             <MapView onVehicleSelect={(vehicle) => setSelectedVehicle(vehicle)} />
@@ -992,8 +993,9 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   sectionTitle: {
-    fontSize: 30,
+    fontSize: 20,
     marginBottom: 10,
+    marginTop:30,
     fontFamily: 'OpenSans',
   },
   sectionTitle1: {
