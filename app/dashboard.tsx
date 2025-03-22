@@ -19,6 +19,7 @@ import { useRouter } from 'expo-router';
 import MapView from './mapView';
 import ShipmentDetails from "../app/shipmentDetails";
 import { useFonts } from 'expo-font';
+import CountCards from './countCards';
 
 const db = getFirestore(app);
 
@@ -267,6 +268,7 @@ const DashboardScreen: React.FC = () => {
         <View style={styles.searchContainer}>
           <View style={styles.section}>
             <Text style={styles.sectionTitle1}>Hello Admin 👋🏻</Text>
+            <CountCards/>
             <Text style={styles.sectionTitle}>Track Delivery Vehicles</Text>
             <MapView onVehicleSelect={(vehicle) => setSelectedVehicle(vehicle)}/>
             <View style={{flexDirection:'row', justifyContent:'space-between', width:'100%', height: 350, padding: 16}}>
