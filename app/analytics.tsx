@@ -17,6 +17,7 @@ const DashboardScreen: React.FC = () => {
   const [selectedTransporter, setSelectedTransporter] = useState<string | null>(null);
   const [activeSlice, setActiveSlice] = useState<string | null>(null);
 
+
   useEffect(() => {
     const fetchShipments = async () => {
       try {
@@ -27,6 +28,7 @@ const DashboardScreen: React.FC = () => {
           ...doc.data(),
           createdAt: doc.data().createdAt?.toDate?.() || new Date(),
           freightCost: Number(doc.data().freightCost) || 0,
+          vehicleNo: doc.data().vehicleNo || 'Unknown', // Ensure vehicleNo exists
         }));
         setShipments(shipmentData);
       } catch (error) {
@@ -37,7 +39,16 @@ const DashboardScreen: React.FC = () => {
     };
     fetchShipments();
   }, []);
+  
 
+
+  const uniqueVehicles = useMemo(() => 
+    [...new Set(shipments.map(s => s.vehicleNo))]
+      .filter(v => v !== null && v !== undefined)
+      .sort(),
+    [shipments]
+  );
+  
   const filteredShipments = useMemo(() => 
     shipments.filter(s => {
       const vehicleMatch = !selectedVehicle || s.vehicleNo === selectedVehicle;
@@ -46,7 +57,7 @@ const DashboardScreen: React.FC = () => {
     }), [shipments, selectedVehicle, selectedTransporter]);
 
   const { statusData, totalShipments } = useMemo(() => {
-    const total = filteredShipments.length || 1;
+    const total = filteredShipments.length;
     const counts = {
       Delivered: filteredShipments.filter(s => s.statusId === 4).length,
       Dispatched: filteredShipments.filter(s => s.statusId === 2).length,
@@ -60,19 +71,19 @@ const DashboardScreen: React.FC = () => {
           value: counts.Delivered, 
           color: '#10b981',
           label: 'Delivered',
-          percentage: (counts.Delivered / total) * 100
+          percentage: total > 0 ? (counts.Delivered / total) * 100 : 0
         },
         { 
           value: counts.Dispatched, 
           color: '#3b82f6',
           label: 'Dispatched',
-          percentage: (counts.Dispatched / total) * 100
+          percentage: total > 0 ? (counts.Dispatched / total) * 100 : 0
         },
         { 
           value: counts.InTransit, 
           color: '#8b5cf6',
           label: 'In Transit',
-          percentage: (counts.InTransit / total) * 100
+          percentage: total > 0 ? (counts.InTransit / total) * 100 : 0
         },
       ]
     };
@@ -124,10 +135,13 @@ const DashboardScreen: React.FC = () => {
         <View style={styles.filterItem}>
           <Text style={styles.filterLabel}>Filter by Vehicle:</Text>
           <RNPickerSelect
-            onValueChange={setSelectedVehicle}
-            items={[...new Set(shipments.map(s => s.vehicleNo))].map(v => ({ label: v, value: v }))}
-            placeholder={{ label: "All Vehicles", value: null }}
+            onValueChange={(value) => setSelectedVehicle(value === 'all' ? null : value)}
+            items={[
+              { label: 'All Vehicles', value: 'all' },
+              ...uniqueVehicles.map(v => ({ label: v, value: v }))
+            ]}
             style={pickerStyles}
+            value={selectedVehicle || 'all'}
           />
         </View>
 
@@ -135,10 +149,13 @@ const DashboardScreen: React.FC = () => {
           <Text style={styles.filterLabel}>Filter by Transporter:</Text>
           <RNPickerSelect
             onValueChange={setSelectedTransporter}
-            items={[...new Set(shipments.map(s => s.transporter))].map(t => ({ label: t, value: t }))}
+            items={[...new Set(shipments.map(s => s.transporter))]
+              .filter(t => t !== null && t !== undefined)
+              .map(t => ({ label: t, value: t }))}
             placeholder={{ label: "All Transporters", value: null }}
             style={pickerStyles}
           />
+
         </View>
       </View>
 
