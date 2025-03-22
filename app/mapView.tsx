@@ -363,7 +363,7 @@ import { collection, onSnapshot, query, where } from "firebase/firestore";
 // Google Maps configuration
 const mapContainerStyle = {
   width: "100%",
-  height: "53.33vh",
+  height: "73.33vh",
   borderRadius: 20
 };
 
