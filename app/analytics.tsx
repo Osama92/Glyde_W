@@ -90,34 +90,18 @@ const DashboardScreen: React.FC = () => {
       ),
     })), [filteredShipments]);
 
-  // const trendData = useMemo(() => 
-  //   filteredShipments.map((s, index) => ({
-  //     value: s.freightCost,
-  //     label: new Date(s.createdAt).toLocaleDateString('en-US', {
-  //       month: 'short',
-  //       day: 'numeric'
-  //     }),
-
-
-
-  //     dataPointText: `${s.driverName}\n₦${s.freightCost.toLocaleString()}`,
-  //   })), [filteredShipments]);
-  const trendData = useMemo(() =>
-    filteredShipments.map((s, index) => {
-      const dateObj = new Date(s.createdAt);
-      const label = dateObj.toLocaleDateString('en-US', {
+  const trendData = useMemo(() => 
+    filteredShipments.map((s, index) => ({
+      value: s.freightCost,
+      label: new Date(s.createdAt).toLocaleDateString('en-US', {
         month: 'short',
-        day: 'numeric',
-      });
-  
-      return {
-        value: s.freightCost,
-        label: `${label} ${index + 1}`, // Ensures uniqueness
-        dataPointText: `${s.driverName}\n₦${s.freightCost.toLocaleString()}`,
-      };
-    }),
-    [filteredShipments]
-  );
+        day: 'numeric'
+      }),
+
+
+
+      dataPointText: `${s.driverName}\n₦${s.freightCost.toLocaleString()}`,
+    })), [filteredShipments]);
   
   
 
