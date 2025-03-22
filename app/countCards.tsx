@@ -146,10 +146,10 @@ interface CollectionData {
 const CountCards: React.FC<CountCardsProps> = () => {
   const [collectionsData, setCollectionsData] = useState<{ [key: string]: CollectionData }>({
     Shipment: { icon: "local-shipping", label: "Total Shipments", count: 0, color: "#4a90e2" },
-    fieldagent: { icon: "engineering", label: "Field Agents", count: 0, color: "#7ed321" },
-    customer: { icon: "groups", label: "Customers", count: 0, color: "#f5a623" },
-    deliverydriver: { icon: "delivery-dining", label: "Drivers", count: 0, color: "#eb5757" },
-    transporter: { icon: "warehouse", label: "Transporters", count: 0, color: "#9013fe" },
+    fieldagent: { icon: "engineering", label: "Total Field Agents", count: 0, color: "#7ed321" },
+    customer: { icon: "groups", label: "Total Customers", count: 0, color: "#f5a623" },
+    deliverydriver: { icon: "delivery-dining", label: "Total Drivers", count: 0, color: "#eb5757" },
+    transporter: { icon: "warehouse", label: "Total Transporters", count: 0, color: "#9013fe" },
   });
 
   const [loading, setLoading] = useState<boolean>(true);
