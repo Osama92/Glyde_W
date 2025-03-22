@@ -577,7 +577,7 @@ const DashboardScreen: React.FC = () => {
         day: 'numeric',
         year: 'numeric'
       }),
-      dataPointText: `${s.driverName}\n$${s.freightCost.toLocaleString()}`,
+      dataPointText: `${s.driverName}\n₦${s.freightCost.toLocaleString()}`,
     })), [filteredShipments]);
 
   if (loading) {
@@ -634,7 +634,7 @@ const DashboardScreen: React.FC = () => {
         <View style={styles.statCard}>
           <MaterialIcons name="attach-money" size={24} color="#10b981" />
           <Text style={styles.statValue}>
-            ${filteredShipments
+          ₦{filteredShipments
               .reduce((sum, s) => sum + s.freightCost, 0)
               .toLocaleString(undefined, { minimumFractionDigits: 2 })}
           </Text>
