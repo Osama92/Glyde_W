@@ -85,17 +85,41 @@ const DashboardScreen: React.FC = () => {
       frontColor: index % 2 === 0 ? '#3b82f6' : '#60a5fa',
       topLabelComponent: () => (
         <Text style={styles.barTopLabel}>
-          ${s.freightCost.toLocaleString()}
+          ₦{s.freightCost.toLocaleString()}
         </Text>
       ),
     })), [filteredShipments]);
 
-  const trendData = useMemo(() => 
-    filteredShipments.map(s => ({
-      value: s.freightCost,
-      label: s.createdAt.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-      dataPointText: `${s.driverName}\n₦${s.freightCost.toLocaleString()}`,
-    })), [filteredShipments]);
+  // const trendData = useMemo(() => 
+  //   filteredShipments.map((s, index) => ({
+  //     value: s.freightCost,
+  //     label: new Date(s.createdAt).toLocaleDateString('en-US', {
+  //       month: 'short',
+  //       day: 'numeric'
+  //     }),
+
+
+
+  //     dataPointText: `${s.driverName}\n₦${s.freightCost.toLocaleString()}`,
+  //   })), [filteredShipments]);
+  const trendData = useMemo(() =>
+    filteredShipments.map((s, index) => {
+      const dateObj = new Date(s.createdAt);
+      const label = dateObj.toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+      });
+  
+      return {
+        value: s.freightCost,
+        label: `${label} ${index + 1}`, // Ensures uniqueness
+        dataPointText: `${s.driverName}\n₦${s.freightCost.toLocaleString()}`,
+      };
+    }),
+    [filteredShipments]
+  );
+  
+  
 
   if (loading) {
     return (
