@@ -822,7 +822,7 @@ const DashboardScreen: React.FC = () => {
             </Pressable>
 
             <Pressable
-              onPress={() => router.push('/onboarding_approval')}
+              onPress={() => router.push('/transportScreen')}
               style={styles.menuItem}
               onHoverIn={() => handleHoverIn('onboarding_approval')}
               onHoverOut={handleHoverOut}
