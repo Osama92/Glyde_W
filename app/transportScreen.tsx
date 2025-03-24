@@ -591,20 +591,20 @@ export default function TransportFinanceScreen() {
         <Card style={styles.metricCard}>
           <Text style={styles.metricTitle}>Receivables</Text>
           <Text style={styles.metricValue}>
-            ${metrics.totalReceivables.toFixed(2)}
+          ₦{metrics.totalReceivables.toFixed(2)}
           </Text>
         </Card>
         <Card style={styles.metricCard}>
           <Text style={styles.metricTitle}>Payables</Text>
           <Text style={styles.metricValue}>
-            ${metrics.totalPayables.toFixed(2)}
+          ₦{metrics.totalPayables.toFixed(2)}
           </Text>
         </Card>
         <Card style={styles.metricCard}>
           <Text style={styles.metricTitle}>Net Cash</Text>
           <Text style={[styles.metricValue, 
             metrics.netCashFlow >= 0 ? styles.positive : styles.negative]}>
-            ${metrics.netCashFlow.toFixed(2)}
+            ₦{metrics.netCashFlow.toFixed(2)}
           </Text>
         </Card>
         <Card style={styles.metricCard}>
@@ -753,13 +753,13 @@ export default function TransportFinanceScreen() {
               </Chip>
             </DataTable.Cell>
             <DataTable.Cell numeric>
-              ${transaction.amount.toFixed(2)}
+            ₦{transaction.amount.toFixed(2)}
             </DataTable.Cell>
             <DataTable.Cell>
               {transaction.description}
               {transaction.transporterId && (
                 <Text style={styles.transporterText}>
-                  \nTransporter: {transporters.find(t => t.id === transaction.transporterId)?.name}
+                  "   ": {transporters.find(t => t.id === transaction.transporterId)?.name}
                 </Text>
               )}
             </DataTable.Cell>

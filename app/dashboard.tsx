@@ -824,6 +824,20 @@ const DashboardScreen: React.FC = () => {
             <Pressable
               onPress={() => router.push('/transportScreen')}
               style={styles.menuItem}
+              onHoverIn={() => handleHoverIn('transportScreen')}
+              onHoverOut={handleHoverOut}
+            >
+              <Image
+                source={require('../assets/images/Acc.png')}
+                resizeMode="contain"
+                style={{ width: 30, height: 30 }}
+              />
+              {hoveredItem === 'transportScreen' && <Text style={styles.tooltip}>Accounts</Text>}
+            </Pressable>
+
+            <Pressable
+              onPress={() => router.push('/onboarding_approval')}
+              style={styles.menuItem}
               onHoverIn={() => handleHoverIn('onboarding_approval')}
               onHoverOut={handleHoverOut}
             >
