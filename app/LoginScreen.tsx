@@ -101,16 +101,27 @@ const LoginScreen: React.FC = () => {
 
   return (
     <View style={[styles.container, isMobile && styles.mobileContainer]}>
-      {/* Left Section (Orange Background) */}
-      <View style={[styles.leftSection, isMobile && styles.mobileLeftSection]}>
+      {/* Modified Left Section */}
+      <LinearGradient 
+        colors={['#FFA500', '#FF8C00']}
+        style={[styles.leftSection, isMobile && styles.mobileLeftSection]}
+      >
         <Image
           source={require('../assets/images/Glyde.png')}
+          style={[
+            styles.logo,
+            { 
+              width: isMobile ? width * 0.4 : width * 0.2,
+              height: isMobile ? width * 0.4 : width * 0.2 
+            }
+          ]}
           resizeMode="contain"
-          style={{ width: width / 4, height: width / 4 }}
         />
-        <Text style={styles.welcomeText}>Welcome Back!</Text>
-        <Text style={styles.subText}>Please log in to continue.</Text>
-      </View>
+        <View style={styles.textContainer}>
+          <Text style={styles.welcomeText}>Welcome Back!</Text>
+          <Text style={styles.subText}>Please log in to continue.</Text>
+        </View>
+      </LinearGradient>
 
       {/* Right Section (Login Form) */}
       <View style={[styles.rightSection, isMobile && styles.mobileRightSection]}>
@@ -289,6 +300,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     color: '#fff',
+  },
+  textContainer: {
+    alignItems: 'center',
+  },
+  logo: {
+    marginBottom: 20,
   },
 });
 
